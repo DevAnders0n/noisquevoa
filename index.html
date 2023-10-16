@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Temporizadores</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: #f2f2f2;
+        }
+
+        .container {
+            text-align: center;
+            background: linear-gradient(135deg, #c850c0, #4158d0);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .temporizador {
+            font-size: 24px;
+            color: #ff5733;
+            margin-top: 10px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Anderson</h1>
+        <div class="temporizador" id="andersonTemporizador"></div>
+    </div>
+
+    <div class="container">
+        <h1>Mattos</h1>
+        <div class="temporizador" id="mattosTemporizador"></div>
+    </div>
+
+    <div class="container">
+        <h1>Richard</h1>
+        <div class="temporizador" id="richardTemporizador"></div>
+    </div>
+
+    <div class="container">
+        <h1>Aroldo</h1>
+        <div class="temporizador" id="aroldoTemporizador"></div>
+    </div>
+
+    <script>
+        var andersonHoraAlvo = 17;
+        var andersonMinutoAlvo = 30;
+
+        var mattosHoraAlvo = 17;
+        var mattosMinutoAlvo = 30;
+
+        var richardHoraAlvo = 18;
+        var richardMinutoAlvo = 0;
+
+        var aroldoHoraAlvo = 16;
+        var aroldoMinutoAlvo = 48;
+
+        function atualizarTemporizador(horaAlvo, minutoAlvo, elemento) {
+            var agora = new Date();
+            var horaAtual = agora.getHours();
+            var minutoAtual = agora.getMinutes();
+            var segundoAtual = agora.getSeconds();
+
+            var horaRestante = horaAlvo - horaAtual;
+            var minutoRestante = minutoAlvo - minutoAtual;
+            var segundoRestante = 60 - segundoAtual;
+
+            if (segundoRestante === 60) {
+                segundoRestante = 0;
+                minutoRestante++;
+            }
+
+            if (minutoRestante < 0) {
+                horaRestante--;
+                minutoRestante += 60;
+            }
+
+            if (horaRestante < 0) {
+                elemento.innerHTML = "Tempo expirado";
+            } else {
+                var tempoRestante = (horaRestante < 10 ? "0" : "") + horaRestante + ":" +
+                    (minutoRestante < 10 ? "0" : "") + minutoRestante + ":" +
+                    (segundoRestante < 10 ? "0" : "") + segundoRestante;
+                elemento.innerHTML = "Tempo restante: " + tempoRestante;
+                setTimeout(function () {
+                    atualizarTemporizador(horaAlvo, minutoAlvo, elemento);
+                }, 1000);
+            }
+        }
+
+        atualizarTemporizador(andersonHoraAlvo, andersonMinutoAlvo, document.getElementById('andersonTemporizador'));
+        atualizarTemporizador(mattosHoraAlvo, mattosMinutoAlvo, document.getElementById('mattosTemporizador'));
+        atualizarTemporizador(richardHoraAlvo, richardMinutoAlvo, document.getElementById('richardTemporizador'));
+        atualizarTemporizador(aroldoHoraAlvo, aroldoMinutoAlvo, document.getElementById('aroldoTemporizador'));
+    </script>
+</body>
+
+</html>
