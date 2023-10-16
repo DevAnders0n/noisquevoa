@@ -1,7 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liberdade</title>
+    <title>Document</title>
     <style>
         body {
             display: flex;
@@ -66,6 +69,12 @@
             font-size: 18px;
             color: #e74c3c;
             margin-top: 10px;
+        }
+
+        .expired {
+            font-size: 20px;
+            color: #e74c3c;
+            margin-top: 20px;
         }
 
         @media screen and (min-width: 768px) {
@@ -134,7 +143,7 @@
         var jesusHoraAlvo = 17;
         var jesusMinutoAlvo = 0;
 
-        function atualizarTemporizador(horaAlvo, minutoAlvo, elemento) {
+        function atualizarTemporizador(horaAlvo, minutoAlvo, elemento, nome) {
             var agora = new Date();
             var horaAtual = agora.getHours();
             var minutoAtual = agora.getMinutes();
@@ -156,24 +165,30 @@
 
             if (horaRestante < 0) {
                 elemento.innerHTML = "Partiu liberdade";
+                elemento.classList.add("expired");
+                // Aqui você pode adicionar o código para elementos visuais chamativos quando o temporizador expirar
+                if (nome === 'Richard') {
+                    elemento.innerHTML += ' 🎉🎉';
+                } else {
+                    elemento.innerHTML += ' 🚀🚀';
+                }
             } else {
                 var tempoRestante = (horaRestante < 10 ? "0" : "") + horaRestante + ":" +
                     (minutoRestante < 10 ? "0" : "") + minutoRestante + ":" +
                     (segundoRestante < 10 ? "0" : "") + segundoRestante;
                 elemento.innerHTML = "Tempo restante: " + tempoRestante;
                 setTimeout(function () {
-                    atualizarTemporizador(horaAlvo, minutoAlvo, elemento);
+                    atualizarTemporizador(horaAlvo, minutoAlvo, elemento, nome);
                 }, 1000);
             }
         }
 
-        atualizarTemporizador(andersonHoraAlvo, andersonMinutoAlvo, document.getElementById('andersonTemporizador'));
-        atualizarTemporizador(mattosHoraAlvo, mattosMinutoAlvo, document.getElementById('mattosTemporizador'));
-        atualizarTemporizador(richardHoraAlvo, richardMinutoAlvo, document.getElementById('richardTemporizador'));
-        atualizarTemporizador(aroldoHoraAlvo, aroldoMinutoAlvo, document.getElementById('aroldoTemporizador'));
-        atualizarTemporizador(jesusHoraAlvo, jesusMinutoAlvo, document.getElementById('jesusTemporizador'));
+        atualizarTemporizador(andersonHoraAlvo, andersonMinutoAlvo, document.getElementById('andersonTemporizador'), "Anderson");
+        atualizarTemporizador(mattosHoraAlvo, mattosMinutoAlvo, document.getElementById('mattosTemporizador'), "Mattos");
+        atualizarTemporizador(richardHoraAlvo, richardMinutoAlvo, document.getElementById('richardTemporizador'), "Richard");
+        atualizarTemporizador(aroldoHoraAlvo, aroldoMinutoAlvo, document.getElementById('aroldoTemporizador'), "Aroldo");
+        atualizarTemporizador(jesusHoraAlvo, jesusMinutoAlvo, document.getElementById('jesusTemporizador'), "Jesus");
     </script>
 </body>
 
 </html>
-
