@@ -65,96 +65,106 @@
     </div>
 
     <script src="script.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-    <script>
-        let andersonTimeDiff, mattosTimeDiff, richardTimeDiff, aroldoTimeDiff, jesusTimeDiff;
+<script>
+    let andersonTimeDiff, mattosTimeDiff, richardTimeDiff, aroldoTimeDiff, jesusTimeDiff;
+    let messageDisplayed = false;
 
-        function updateDateTime() {
-            const months = [
-                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-            ];
-            const days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
-                "Quinta-feira", "Sexta-feira", "Sábado"
-            ];
+    function updateDateTime() {
+        const months = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
+        const days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+            "Quinta-feira", "Sexta-feira", "Sábado"
+        ];
 
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const day = days[now.getDay()];
-            const month = months[now.getMonth()];
-            const dayOfMonth = now.getDate();
-            const timeString = hours + ':' + minutes;
-            const dateString = `${day}, ${dayOfMonth} de ${month}`;
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const day = days[now.getDay()];
+        const month = months[now.getMonth()];
+        const dayOfMonth = now.getDate();
+        const timeString = hours + ':' + minutes;
+        const dateString = `${day}, ${dayOfMonth} de ${month}`;
 
-            document.getElementById('current-time').textContent = timeString;
-            document.getElementById('current-date').textContent = dateString;
-        }
+        document.getElementById('current-time').textContent = timeString;
+        document.getElementById('current-date').textContent = dateString;
+    }
 
-        function updateTimer() {
-            const now = new Date();
-
-            const andersonTargetTime = new Date(now);
-            andersonTargetTime.setHours(17, 30, 0, 0);
-
-            const mattosTargetTime = new Date(now);
-            mattosTargetTime.setHours(17, 30, 0, 0);
-
-            const richardTargetTime = new Date(now);
-            richardTargetTime.setHours(18, 0, 0, 0);
-
-            const aroldoTargetTime = new Date(now);
-            aroldoTargetTime.setHours(16, 48, 0, 0);
-
-            const jesusTargetTime = new Date(now);
-            if (now.getDay() === 5) {
-                jesusTargetTime.setHours(12, 0, 0, 0);
-            } else {
-                jesusTargetTime.setHours(17, 0, 0, 0);
-            }
-
-            andersonTimeDiff = andersonTargetTime - now;
-            const andersonSeconds = Math.floor((andersonTimeDiff / 1000) % 60);
-            const andersonMinutes = Math.floor((andersonTimeDiff / (1000 * 60)) % 60);
-            const andersonHours = Math.floor(andersonTimeDiff / (1000 * 60 * 60));
-            document.getElementById('anderson-timer').textContent = `Anderson: ${andersonHours}h ${andersonMinutes}min ${andersonSeconds}s`;
-
-            mattosTimeDiff = mattosTargetTime - now;
-            const mattosSeconds = Math.floor((mattosTimeDiff / 1000) % 60);
-            const mattosMinutes = Math.floor((mattosTimeDiff / (1000 * 60)) % 60);
-            const mattosHours = Math.floor(mattosTimeDiff / (1000 * 60 * 60));
-            document.getElementById('mattos-timer').textContent = `Mattos: ${mattosHours}h ${mattosMinutes}min ${mattosSeconds}s`;
-
-            richardTimeDiff = richardTargetTime - now;
-            const richardSeconds = Math.floor((richardTimeDiff / 1000) % 60);
-            const richardMinutes = Math.floor((richardTimeDiff / (1000 * 60)) % 60);
-            const richardHours = Math.floor(richardTimeDiff / (1000 * 60 * 60));
-            document.getElementById('richard-timer').textContent = `Richard: ${richardHours}h ${richardMinutes}min ${richardSeconds}s`;
-
-            aroldoTimeDiff = aroldoTargetTime - now;
-            const aroldoSeconds = Math.floor((aroldoTimeDiff / 1000) % 60);
-            const aroldoMinutes = Math.floor((aroldoTimeDiff / (1000 * 60)) % 60);
-            const aroldoHours = Math.floor(aroldoTimeDiff / (1000 * 60 * 60));
-            document.getElementById('aroldo-timer').textContent = `Aroldo: ${aroldoHours}h ${aroldoMinutes}min ${aroldoSeconds}s`;
-
-            jesusTimeDiff = jesusTargetTime - now;
-            const jesusSeconds = Math.floor((jesusTimeDiff / 1000) % 60);
-            const jesusMinutes = Math.floor((jesusTimeDiff / (1000 * 60)) % 60);
-            const jesusHours = Math.floor(jesusTimeDiff / (1000 * 60 * 60));
-            document.getElementById('jesus-timer').textContent = `Jesus: ${jesusHours}h ${jesusMinutes}min ${jesusSeconds}s`;
-
-            if (andersonTimeDiff <= 0 && mattosTimeDiff <= 0 && richardTimeDiff <= 0 && aroldoTimeDiff <= 0 && jesusTimeDiff <= 0) {
-                document.body.innerHTML = "<h1 style='text-align: center; margin-top: 100px; font-size: 36px;'>Foi de Vasco</h1>";
+    function displayMessage() {
+            if (!messageDisplayed) {
+                const messageElement = document.createElement('h1');
+                messageElement.style.textAlign = 'center';
+                messageElement.style.marginTop = '100px';
+                messageElement.style.fontSize = '36px';
+                messageElement.textContent = 'Acabou o expediente 🎉';
+                document.body.appendChild(messageElement);
+                messageDisplayed = true;
             }
         }
 
-        updateDateTime();
-        updateTimer();
-        setInterval(updateDateTime, 1000);
-        setInterval(updateTimer, 1000);
-    </script>
+    function formatTimeDiff(timeDiff) {
+        if (timeDiff > 0) {
+            const seconds = Math.floor((timeDiff / 1000) % 60);
+            const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            return `${hours}h ${minutes}min ${seconds}s`;
+        }
+        return "0h 0min 0s";
+    }
+
+    function updateTimer() {
+        const now = new Date();
+
+        const andersonTargetTime = new Date(now);
+        andersonTargetTime.setHours(17, 30, 0, 0);
+
+        const mattosTargetTime = new Date(now);
+        mattosTargetTime.setHours(17, 30, 0, 0);
+
+        const richardTargetTime = new Date(now);
+        richardTargetTime.setHours(18, 0, 0, 0);
+
+        const aroldoTargetTime = new Date(now);
+        aroldoTargetTime.setHours(16, 48, 0, 0);
+
+        const jesusTargetTime = new Date(now);
+        if (now.getDay() === 5) {
+            jesusTargetTime.setHours(12, 0, 0, 0);
+        } else {
+            jesusTargetTime.setHours(17, 0, 0, 0);
+        }
+
+        andersonTimeDiff = andersonTargetTime - now;
+        document.getElementById('anderson-timer').textContent = `Anderson: ${formatTimeDiff(andersonTimeDiff)}`;
+
+        mattosTimeDiff = mattosTargetTime - now;
+        document.getElementById('mattos-timer').textContent = `Mattos: ${formatTimeDiff(mattosTimeDiff)}`;
+
+        richardTimeDiff = richardTargetTime - now;
+        document.getElementById('richard-timer').textContent = `Richard: ${formatTimeDiff(richardTimeDiff)}`;
+
+        aroldoTimeDiff = aroldoTargetTime - now;
+        document.getElementById('aroldo-timer').textContent = `Aroldo: ${formatTimeDiff(aroldoTimeDiff)}`;
+
+        jesusTimeDiff = jesusTargetTime - now;
+        document.getElementById('jesus-timer').textContent = `Jesus: ${formatTimeDiff(jesusTimeDiff)}`;
+
+        if (andersonTimeDiff <= 0 && mattosTimeDiff <= 0 && richardTimeDiff <= 0 && aroldoTimeDiff <= 0 && jesusTimeDiff <= 0) {
+            displayMessage();
+        }
+    }
+
+    updateDateTime();
+    updateTimer();
+    setInterval(updateDateTime, 1000);
+    setInterval(updateTimer, 1000);
+    
+</script>
+
 </body>
 </html>
 <style>
