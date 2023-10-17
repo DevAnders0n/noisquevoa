@@ -153,6 +153,9 @@
         updateTimer();
         setInterval(updateDateTime, 1000);
         setInterval(updateTimer, 1000);
+         if (andersonTimeDiff <= 0 && mattosTimeDiff <= 0 && richardTimeDiff <= 0 && aroldoTimeDiff <= 0 && jesusTimeDiff <= 0) {
+        document.body.innerHTML = "<h1 style='text-align: center; margin-top: 100px; font-size: 36px;'>Foi de Vasco</h1>";
+    }
     </script>
 </body>
 
