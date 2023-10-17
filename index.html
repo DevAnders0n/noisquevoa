@@ -1,194 +1,373 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background: #f2f2f2;
-        }
-
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .title-container {
-            text-align: center;
-            padding: 20px;
-            margin: 10px;
-            width: 80%;
-            max-width: 400px;
-            background: #3498db;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .grid-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-            width: calc(50% - 30px);
-            background: #3498db;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .temporizador {
-            font-size: 18px;
-            color: #e74c3c;
-            margin-top: 10px;
-        }
-
-        .expired {
-            font-size: 20px;
-            color: #e74c3c;
-            margin-top: 20px;
-        }
-
-        @media screen and (min-width: 768px) {
-            .container {
-                width: 300px;
-            }
-
-            h1 {
-                font-size: 28px;
-            }
-
-            .temporizador {
-                font-size: 22px;
-            }
-        }
-    </style>
+    <title>Lock screen</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-    <div class="main-container">
-        <div class="title-container">
-            <h1>Liberdade irá cantar em:</h1>
+    <div class="main">
+        <div class="side left">
+            <div class="dash left top"></div>
+
+            <div class="audio">
+                <div class="side ringer"></div>
+                <div class="side volume up"></div>
+                <div class="side volume down"></div>
+            </div>
+
+            <div class="dash left bottom"></div>
         </div>
 
-        <div class="grid-container">
-            <div class="container">
-                <h1>Anderson</h1>
-                <div class="temporizador" id="andersonTemporizador"></div>
-            </div>
+        <div class="iphone" id="iphone">
+            <div class="dash top"></div>
 
-            <div class="container">
-                <h1>Mattos</h1>
-                <div class="temporizador" id="mattosTemporizador"></div>
-            </div>
+            <div class="inner" id="inner">
+                <div class="content" id="content">
+                    <div class="lock">
+                        <h1 class="time" id="current-time">00:00</h1>
+                        <h1 class="date" id="current-date">Segunda-feira, 1 de Janeiro</h1>
+                    </div>
+                </div>
 
-            <div class="container">
-                <h1>Richard</h1>
-                <div class="temporizador" id="richardTemporizador"></div>
-            </div>
+                <div class="timer" id="anderson-timer">
+                </div>
 
-            <div class="container">
-                <h1>Aroldo</h1>
-                <div class="temporizador" id="aroldoTemporizador"></div>
-            </div>
+                <div class="timer" id="mattos-timer">
+                </div>
 
-            <div class="container">
-                <h1>Jesus</h1>
-                <div class="temporizador" id="jesusTemporizador"></div>
+                <div class="timer" id="richard-timer">
+                </div>
+
+                <div class="timer" id="aroldo-timer">
+                </div>
+
+                <div class="timer" id="jesus-timer">
+                </div>
+
+                <a href="/passcode.html">
+                    <div class="home"></div>
+                </a>
+
             </div>
+        </div>
+
+        <div class="side right">
+            <div class="dash right top"></div>
+
+            <div class="side power" onclick="turnOff()"></div>
+
+            <div class="dash right bottom"></div>
         </div>
     </div>
 
+    <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <script>
-        var andersonHoraAlvo = 17;
-        var andersonMinutoAlvo = 30;
+        function updateDateTime() {
+            const months = [
+                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+            ];
+            const days = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+                "Quinta-feira", "Sexta-feira", "Sábado"
+            ];
 
-        var mattosHoraAlvo = 17;
-        var mattosMinutoAlvo = 30;
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const day = days[now.getDay()];
+            const month = months[now.getMonth()];
+            const dayOfMonth = now.getDate();
+            const timeString = hours + ':' + minutes;
+            const dateString = `${day}, ${dayOfMonth} de ${month}`;
 
-        var richardHoraAlvo = 18;
-        var richardMinutoAlvo = 0;
-
-        var aroldoHoraAlvo = 16;
-        var aroldoMinutoAlvo = 48;
-
-        var jesusHoraAlvo = 17;
-        var jesusMinutoAlvo = 0;
-
-        function atualizarTemporizador(horaAlvo, minutoAlvo, elemento, nome) {
-            var agora = new Date();
-            var horaAtual = agora.getHours();
-            var minutoAtual = agora.getMinutes();
-            var segundoAtual = agora.getSeconds();
-
-            var horaRestante = horaAlvo - horaAtual;
-            var minutoRestante = minutoAlvo - minutoAtual;
-            var segundoRestante = 60 - segundoAtual;
-
-            if (segundoRestante === 60) {
-                segundoRestante = 0;
-                minutoRestante++;
-            }
-
-            if (minutoRestante < 0) {
-                horaRestante--;
-                minutoRestante += 60;
-            }
-
-            if (horaRestante < 0) {
-                elemento.innerHTML = "Partiu liberdade";
-                elemento.classList.add("expired");
-                // Aqui você pode adicionar o código para elementos visuais chamativos quando o temporizador expirar
-                if (nome === 'Richard') {
-                    elemento.innerHTML += ' 🎉🎉';
-                } else {
-                    elemento.innerHTML += ' 🚀🚀';
-                }
-            } else {
-                var tempoRestante = (horaRestante < 10 ? "0" : "") + horaRestante + ":" +
-                    (minutoRestante < 10 ? "0" : "") + minutoRestante + ":" +
-                    (segundoRestante < 10 ? "0" : "") + segundoRestante;
-                elemento.innerHTML = "Tempo restante: " + tempoRestante;
-                setTimeout(function () {
-                    atualizarTemporizador(horaAlvo, minutoAlvo, elemento, nome);
-                }, 1000);
-            }
+            document.getElementById('current-time').textContent = timeString;
+            document.getElementById('current-date').textContent = dateString;
         }
 
-        atualizarTemporizador(andersonHoraAlvo, andersonMinutoAlvo, document.getElementById('andersonTemporizador'), "Anderson");
-        atualizarTemporizador(mattosHoraAlvo, mattosMinutoAlvo, document.getElementById('mattosTemporizador'), "Mattos");
-        atualizarTemporizador(richardHoraAlvo, richardMinutoAlvo, document.getElementById('richardTemporizador'), "Richard");
-        atualizarTemporizador(aroldoHoraAlvo, aroldoMinutoAlvo, document.getElementById('aroldoTemporizador'), "Aroldo");
-        atualizarTemporizador(jesusHoraAlvo, jesusMinutoAlvo, document.getElementById('jesusTemporizador'), "Jesus");
+        function updateTimer() {
+            const now = new Date();
+
+            // Anderson
+            const andersonTargetTime = new Date(now);
+            andersonTargetTime.setHours(17, 30, 0, 0);
+
+            // Mattos
+            const mattosTargetTime = new Date(now);
+            mattosTargetTime.setHours(17, 30, 0, 0);
+
+            // Richard
+            const richardTargetTime = new Date(now);
+            richardTargetTime.setHours(18, 0, 0, 0);
+
+            // Aroldo
+            const aroldoTargetTime = new Date(now);
+            aroldoTargetTime.setHours(16, 48, 0, 0);
+
+            // Jesus
+            const jesusTargetTime = new Date(now);
+            if (now.getDay() === 5) {
+                jesusTargetTime.setHours(12, 0, 0, 0);
+            } else {
+                jesusTargetTime.setHours(17, 0, 0, 0);
+            }
+
+            const andersonTimeDiff = andersonTargetTime - now;
+            const andersonSeconds = Math.floor((andersonTimeDiff / 1000) % 60);
+            const andersonMinutes = Math.floor((andersonTimeDiff / (1000 * 60)) % 60);
+            const andersonHours = Math.floor(andersonTimeDiff / (1000 * 60 * 60));
+            document.getElementById('anderson-timer').textContent = `Anderson: ${andersonHours}h ${andersonMinutes}min ${andersonSeconds}s`;
+
+            const mattosTimeDiff = mattosTargetTime - now;
+            const mattosSeconds = Math.floor((mattosTimeDiff / 1000) % 60);
+            const mattosMinutes = Math.floor((mattosTimeDiff / (1000 * 60)) % 60);
+            const mattosHours = Math.floor(mattosTimeDiff / (1000 * 60 * 60));
+            document.getElementById('mattos-timer').textContent = `Mattos: ${mattosHours}h ${mattosMinutes}min ${mattosSeconds}s`;
+
+            const richardTimeDiff = richardTargetTime - now;
+            const richardSeconds = Math.floor((richardTimeDiff / 1000) % 60);
+            const richardMinutes = Math.floor((richardTimeDiff / (1000 * 60)) % 60);
+            const richardHours = Math.floor(richardTimeDiff / (1000 * 60 * 60));
+            document.getElementById('richard-timer').textContent = `Richard: ${richardHours}h ${richardMinutes}min ${richardSeconds}s`;
+
+            const aroldoTimeDiff = aroldoTargetTime - now;
+            const aroldoSeconds = Math.floor((aroldoTimeDiff / 1000) % 60);
+            const aroldoMinutes = Math.floor((aroldoTimeDiff / (1000 * 60)) % 60);
+            const aroldoHours = Math.floor(aroldoTimeDiff / (1000 * 60 * 60));
+            document.getElementById('aroldo-timer').textContent = `Aroldo: ${aroldoHours}h ${aroldoMinutes}min ${aroldoSeconds}s`;
+
+            const jesusTimeDiff = jesusTargetTime - now;
+            const jesusSeconds = Math.floor((jesusTimeDiff / 1000) % 60);
+            const jesusMinutes = Math.floor((jesusTimeDiff / (1000 * 60)) % 60);
+            const jesusHours = Math.floor(jesusTimeDiff / (1000 * 60 * 60));
+            document.getElementById('jesus-timer').textContent = `Jesus: ${jesusHours}h ${jesusMinutes}min ${jesusSeconds}s`;
+        }
+
+        updateDateTime();
+        updateTimer();
+        setInterval(updateDateTime, 1000);
+        setInterval(updateTimer, 1000);
     </script>
 </body>
 
 </html>
+<style>
+    * {
+    box-sizing: border-box;
+    margin: 0;
+    font-weight: 200;
+    user-select: none;
+}
+
+body,
+html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    background-color: #1f2025;
+    color: #ffffff;
+}
+
+.main {
+    box-shadow: 20px 18px 13px 3px rgb(0 0 0 / 40%);
+    border-radius: 40px;
+    display: flex;
+    transform: scale(0.85);
+}
+
+.iphone {
+    border-radius: 40px;
+    width: 390px;
+    height: 844px;
+    box-shadow: 0 0 0px 4.34px #515056;
+    border: 10px solid #000000;
+    background-image: url("https://raw.githubusercontent.com/HamzaZaidiX/I-PHONE-BY-HTML-CSS-JAVASCRIPT-/main/Images/Backgrounds/lockscreen.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 2;
+}
+
+.side> *:not(.dash) {
+    cursor: pointer;
+}
+
+.side.power {
+    height: 90px;
+    width: 6px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: #3c3b41;
+    margin-top: 120px;
+    position: relative;
+    left: 4px;
+    z-index: 1;
+}
+
+.audio {
+    margin-top: 70px;
+}
+
+.audio .side.ringer {
+    height: 30px;
+    width: 6px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: #3c3b41;
+    position: relative;
+    right: 4px;
+}
+
+.autio .side.volume {
+    cursor: pointer;
+}
+
+.audio .side.volume:active {
+    right: 2px !important;
+}
+
+.audio .side.volume.up {
+    height: 50px;
+    width: 6px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: #3c3b41;
+    margin-top: 20px;
+    position: relative;
+    right: 4px;
+}
+
+.audio .side.volume.down {
+    height: 50px;
+    width: 6px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: #3c3b41;
+    margin-top: 20px;
+    position: relative;
+    right: 4px;
+}
+
+.dash {
+    width: 5px;
+    height: 4px;
+    background: #67666b;
+    position: relative;
+}
+
+.dash.left,
+.dash.right {
+    margin-top: 70px;
+    left: 2px;
+    z-index: 3;
+    width: 4px;
+}
+
+.dash.right {
+    left: 0.5px;
+}
+
+.dash.left.bottom {
+    margin-top: 450px;
+}
+
+.dash.right.bottom {
+    margin-top: 470px;
+}
+
+.iphone .dash.top {
+    bottom: 14px;
+    left: 300px;
+}
+
+.iphone .dash.bottom {
+    top: 15px;
+    left: 60px;
+}
+
+.iphone .inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    bottom: 5px;
+    transition-duration: 0.4s;
+}
+
+.iphone .inner .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.iphone .inner .content .lock {
+    margin-top: 30px;
+}
+
+.iphone .inner .content .time {
+    font-size: 80px;
+    margin-top: 10px;
+}
+
+.iphone .inner .content .date {
+    font-size: 20px;
+}
+
+.iphone .inner .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 200px;
+    position: relative;
+    top: 60%;
+}
+
+.iphone .inner .buttons button {
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #1d2145;
+    border: none;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 50px;
+    transition-duration: 0.1s;
+}
+
+.iphone .inner .buttons button:active {
+    transform: scale(1.5);
+    background-color: #121424;
+}
+
+.iphone .inner .buttons button.torch img {
+    height: 30px;
+}
+
+.iphone .inner .buttons button.camera img {
+    width: 30px;
+}
+
+.timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    font-size: 24px; /* Tamanho da fonte ajustado para 24px */
+}
+
+.timer h2 {
+    color: white;
+}
+
+</style>'
